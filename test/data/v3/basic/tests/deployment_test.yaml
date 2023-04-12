@@ -58,3 +58,27 @@ tests:
           count: 2
       - matchSnapshot:
           path: spec
+
+  - it: should fail if nameOverride is longer than 20 characters
+    template: templates/deployment.yaml
+    set:
+      nameOverride: overridden-name-12345
+    asserts:
+      - failedTemplate:
+          errorMessage: nameOverride cannot be longer than 20 characters
+
+  - it: should fail if service internalPort is missing
+    template: templates/deployment.yaml
+    set:
+      service.internalPort: null
+    asserts:
+      - failedTemplate:
+          errorMessage: service.internalPort is required
+
+  - it: should fail if env is not present
+    template: templates/deployment.yaml
+    set:
+      env: null
+    asserts:
+      - failedTemplate:
+          errorMessage: Value `env` is required.

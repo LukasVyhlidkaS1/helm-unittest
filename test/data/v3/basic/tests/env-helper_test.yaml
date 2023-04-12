@@ -1,0 +1,21 @@
+suite: test env-helper
+templates:
+  - env-helper.yaml
+chart:
+  version: 9.9.9+test
+  appVersion: 9.9.9
+tests:
+  - it: should render correct envs
+    asserts:
+      - equal:
+          path: env
+          value:
+            - name: ENV
+              value: staging
+
+  - it: should fail if env is not present
+    set:
+      env: null
+    asserts:
+      - failedTemplate:
+          errorMessage: Value `env` has to be set.
